@@ -1,46 +1,32 @@
 package com.meritamerica.assignment2;
 
 import java.util.Date;
-
-public class CDAccount extends BankAccount{
+import java.util.Date;
+public class CDAccount extends BankAccount {
 	
-	//Instance Variables
-	private CDOffering cdOffering;
-	private double balance;
-	private double interestRate;
-	private int term;
-	private long accountNumber;
-	private double futureValue;
+	CDOffering offering;
+	Date date;
 	
-	//Default constructor
-	public CDAccount(CDOffering cdoffering, double balance){
-		super(balance, cdoffering.getInterestRate());
-		this.cdOffering = cdoffering;
+	public CDAccount(CDOffering offering, double balance) {
+		super(balance);
+		this.date = new Date();
+		this.offering = offering;
 	}
 	
-		
-	public double getBalance() {
-		return cdOffering.getBalance();
-	}
+//	public double getBalance() {
+//		return this.balance;
+//	}
 	
 	public double getInterestRate() {
-		return cdOffering.getInterestRate();
+		return this.offering.getInterestRate();
 	}
 	
 	public int getTerm() {
-		return cdOffering.getTerm();
+		return this.offering.getTerm();
 	}
 	
-	java.util.Date getStartDate() {
-		return cdOffering.getStartDate();
-	}
-	
-	public long getAccountNumber() {
-		return cdOffering.getAccountNumber();
-	}
-	
-	public double futureValue(int years) {
-		return Math.pow(1 + interestRate,  years) * balance;
+	public double futureValue() {
+		return getBalance()*Math.pow(getInterestRate(), getTerm());
 	}
 }
 

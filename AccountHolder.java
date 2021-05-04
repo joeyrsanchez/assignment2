@@ -1,172 +1,201 @@
 package com.meritamerica.assignment2;
 
 import java.util.Arrays;
+import com.meritamerica.assignment2.CheckingAccount;
+import com.meritamerica.assignment2.SavingsAccount;
 
 public class AccountHolder {
-	
-	//instance variables
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private String ssn;
-    private CheckingAccount[] checkingAccounts;
-    private SavingsAccount[] savingsAccounts;
-    private CDAccount [] cdAccounts;
-    
-    //default constructor
-    public AccountHolder() {
-    	
-    }
-    //special constructor
-    public AccountHolder(
-    String firstName,
-    String middleName,
-    String lastName,
-    String ssn)
 
-    {
-    	//Assigned Variables used to build objects
-    	this.firstName = firstName;
-    	this.middleName = middleName;
-    	this.lastName = lastName;
-    	this.ssn = ssn;
-    	this.checkingAccounts = new CheckingAccount[0];
-    	this.savingsAccounts = new SavingsAccount[0];
-    	this.cdAccounts = new CDAccount [0];
+	private String firstName;
+	private String middleName;
+	private String lastName;
+	private String ssn;
+	CheckingAccount[] checkingArray = new CheckingAccount[10];
+	SavingsAccount[] savingsArray = new SavingsAccount[10];
+	CDAccount[] CDAArray = new CDAccount[10];
+	private static final double CHECKINGFEE = 250000;
 
-    }
-  
-	// getter/setter methods
-	public String getFirstName() {return firstName;}
-	public void setFirstName(String firstName) {this.firstName = firstName;}
-	public String getMiddleName() {return middleName;}
-	public void setMiddleName(String middleName) {this.middleName = middleName;}
-	public String getLastName() {return lastName;}
-	public void setLastName(String lastName) {this.lastName = lastName;}
-	public String getSsn() {return ssn;}
-	public void setSsn(String ssn) {this.ssn = ssn;}
-	public CheckingAccount[] getCheckingAccounts() {return checkingAccounts;}
-	public SavingsAccount[] getSavingsAccounts() {return savingsAccounts;}
-	
-	
-	
-	//Method for Checking Account portion of Account Holder
+	// Constructors
+	public AccountHolder(String firstName, String middleName, String lastName, String ssn) {
+
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
+		this.ssn = ssn;
+	}
+
+	// Account GETTERS and SETTERS
+
+	// First name setter & getter
+
+	protected void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	protected String getFirstName() {
+		return firstName;
+	}
+
+	// Middle name setter & getter
+
+	protected void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	protected String getMiddleName() {
+		return middleName;
+	}
+
+	// Last name setter & getter
+
+	protected void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	protected String getLastName() {
+		return lastName;
+	}
+
+	// SSN setter & getter
+
+	protected void setSSN(String ssn) {
+		this.ssn = ssn;
+	}
+
+	protected String getSSN() {
+		return ssn;
+	}
+
 	public CheckingAccount addCheckingAccount(double openingBalance) {
-		
-		//Calls a constructor and creates an object
-		CheckingAccount alpha = new CheckingAccount(openingBalance);
-		CheckingAccount[] temp = new CheckingAccount[checkingAccounts.length + 1];
-		for (int i = 0; i < checkingAccounts.length; i++) {
-			temp[i] = checkingAccounts[i];
+		if (getCombinedBalance() - getCDBalance() + openingBalance <= CHECKINGFEE) {
+			System.out.println("pass checking fee: ");
+			CheckingAccount cac = new CheckingAccount(openingBalance);
+			if (cac != null) {
+				System.out.println("Account created: ");
+				return addCheckingAccount(cac);
+			}
 		}
-		temp[temp.length] = alpha;
-		this.checkingAccounts = temp;
-		return alpha;
+		return null;
 	}
-	
+
 	public CheckingAccount addCheckingAccount(CheckingAccount checkingAccount) {
-		CheckingAccount[] temp = new CheckingAccount[checkingAccounts.length + 1];
-		for (int i = 0; i < checkingAccounts.length; i++) {
-			temp[i] = checkingAccounts[i];
+		if (getCombinedBalance() - getCDBalance() + checkingAccount.getBalance() <= CHECKINGFEE) {
+			System.out.println("Account fee acepted: ");
+			for (int i = 0; i < checkingArray.length; i++) {
+				if (checkingArray[i] == null) {
+					checkingArray[i] = checkingAccount;
+					System.out.println(checkingArray.length + " add checking account");
+					return checkingArray[i];
+				}
+			}
 		}
-		temp[temp.length] = checkingAccount;
-		this.checkingAccounts = temp;
-		return checkingAccount;
+		return null;
 	}
 
-	 public int getNumberOfCheckingAccounts() {
-		 return checkingAccounts.length;
-	 }
-	
+	public CheckingAccount[] getCheckingAccounts() {
+		return checkingArray;
+	}
+
+	public int getNumberOfCheckingAccount() {
+		return checkingArray.length;
+	}
+
 	public double getCheckingBalance() {
-		double sum = 0;
-		for (int i = 0; i < checkingAccounts.length; i++) {
-			sum += checkingAccounts[i].getBalance();
-		}
-		return sum;	
+		if (checkingArray != null) {
+			double checkingBalance = 0.0;
+			for (int i = 0; i < checkingArray.length; i++) {
+				if (checkingArray[i] != null) {
+					checkingBalance += checkingArray[i].getBalance();
+				}
+			}
+			return checkingBalance;
+		} else
+			return 0;
 	}
-	
-	
-	
-	//Savings Account portion of Account Holder
+
 	public SavingsAccount addSavingsAccount(double openingBalance) {
-		
-		//Calls a constructor and creates an object
-		SavingsAccount alpha = new SavingsAccount(openingBalance);
-		SavingsAccount[] temp = new SavingsAccount[savingsAccounts.length + 1];
-		for (int i = 0; i < savingsAccounts.length; i++) {
-			temp[i] = savingsAccounts[i];
+		if (getCombinedBalance() - getCDBalance() + openingBalance <= CHECKINGFEE) {
+			return addSavingsAccount(new SavingsAccount(openingBalance));
 		}
-		temp[temp.length] = alpha;
-		this.savingsAccounts = temp;
-		return alpha;
+		return null;
 	}
-	
-	public SavingsAccount addSavingsAccount(SavingsAccount savingsAccount) {
-		SavingsAccount[] temp = new SavingsAccount[savingsAccounts.length + 1];
-		for (int i = 0; i < savingsAccounts.length; i++) {
-			temp[i] = savingsAccounts[i];
+
+	public SavingsAccount addSavingsAccount(SavingsAccount openingBalance) {
+		if (getCombinedBalance() - getCDBalance() + openingBalance.getBalance() <= CHECKINGFEE) {
+			for (int i = 0; i < savingsArray.length; i++) {
+				if (savingsArray[i] == null) {
+					savingsArray[i] = openingBalance;
+					break;
+				}
+			}
 		}
-		temp[temp.length] = savingsAccount;
-		this.savingsAccounts = temp;
-		return savingsAccount;
+		return null;
 	}
-	
-	 public int getNumberOfSavingsAccounts() {
-		 return savingsAccounts.length;
-	 }
-	
+
+	public SavingsAccount[] getSavingsAccounts() {
+		return savingsArray;
+	}
+
+	public int getNumberOfSavingsAccounts() {
+		return savingsArray.length;
+	}
+
 	public double getSavingsBalance() {
-		double sum = 0;
-		for (int i = 0; i < savingsAccounts.length; i++) {
-			sum += savingsAccounts[i].getBalance();
+		if (savingsArray != null) {
+			double savingsBalance = 0.0;
+			for (int i = 0; i < savingsArray.length; i++) {
+				if (savingsArray[i] != null) {
+					savingsBalance += savingsArray[i].getBalance();
+				}
+			}
+			return savingsBalance;
 		}
-		return sum;	
+		return 0;
 	}
-	
-	
-	
-	//CD Account portion of Account Holder
-	public CDAccount addCDAccount(double openingBalance) {
-		
-		//Calls a constructor and creates an object
-		CDAccount alpha = new CDAccount(openingBalance);
-		CDAccount[] temp = new CDAccount[cdAccounts.length + 1];
-		for (int i = 0; i < cdAccounts.length; i++) {
-			temp[i] = cdAccounts[i];
+
+	public CDAccount addCDAccount(CDOffering offering, double openingBalance) {
+		if (MeritBank.getCDOfferings() != null) {
+			return addCDAccount(new CDAccount(offering, openingBalance));
 		}
-		temp[temp.length] = alpha;
-		this.cdAccounts = temp;
-		return alpha;
+		return null;
 	}
-	
+
 	public CDAccount addCDAccount(CDAccount cdAccount) {
-		CDAccount[] temp = new CDAccount[cdAccounts.length + 1];
-		for (int i = 0; i < cdAccounts.length; i++) {
-			temp[i] = cdAccounts[i];
+		for (int i = 0; i < CDAArray.length; i++) {
+			if (CDAArray[i] == null) {
+				CDAArray[i] = cdAccount;
+				return cdAccount;
+			}
 		}
-		temp[temp.length] = cdAccount;
-		this.cdAccounts = temp;
-		return cdAccount;
+
+		return null;
 	}
 
-	 public int getNumberOfCDAccounts() {
-		 return cdAccounts.length;
-	 }
-	
-	public double getCDAccount() {
-		double sum = 0;
-		for (int i = 0; i < cdAccounts.length; i++) {
-			sum += cdAccounts[i].getBalance();
-		}
-		return sum;	
+	public CDAccount[] getCDAccounts() {
+		return CDAArray;
 	}
 
+	public int getNumberOfCDAccounts() {
+		return CDAArray.length;
+	}
 
-	  @Override
-		public String toString() {
-			return "AccountHolder [firstName=" + firstName + ", middleName=" + middleName 
-					+ ", lastName=" + lastName + ", ssn=" + ssn;
-
+	public double getCDBalance() {
+		if (CDAArray != null) {
+			double CDBalance = 0.0;
+			for (int i = 0; i < CDAArray.length; i++) {
+				if (CDAArray[i] != null) {
+					CDBalance += CDAArray[i].getBalance();
+				}
+			}
+			return CDBalance;
 		}
+		return 0;
+	}
+
+	public double getCombinedBalance() {
+		double res = getCheckingBalance() + getSavingsBalance() + getCDBalance();
+		System.out.println(res);
+		return res;
+	}
 }
+

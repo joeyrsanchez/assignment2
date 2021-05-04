@@ -1,16 +1,8 @@
 package com.meritamerica.assignment2;
 
-public class SavingsAccount extends BankAccount{
-	private static double interestRate = 0.01;
+public class SavingsAccount extends BankAccount {
 	
-	//Constructor
-	public SavingsAccount (double openingBalance) {
-		super(openingBalance, interestRate);
-	}
-	
-	@Override
-	public String toString() {
-		return "SavingsAccount [balance=" + this.getBalance() + ", interestRate=" 
-				+ interestRate + ", FutureValue=" + futureValue (3) + "]";
+	public SavingsAccount(double balance) {
+		super(balance, 0.01);
 	}
 }
